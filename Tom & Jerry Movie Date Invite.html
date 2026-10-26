@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tom & Jerry Movie Date Invite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wall:#bfe3d0; --wall2:#b3dcc8; --card:#fffaf0; --ink:#1f2a44; --soft:#4a5673;
+  --cheese:#ffc83d; --cheese-ink:#3b2a00; --tom:#5b7c99; --line:#1f2a44; --pink:#ff7a8a;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--wall:#16223a;--wall2:#1b2a47;--card:#24304d;--ink:#f6f1e4;--soft:#c3cbe0;--cheese:#ffc83d;--cheese-ink:#3b2a00;--tom:#8fb0cf;--line:#f6f1e4;--pink:#ff8d9b}
+}
+:root[data-theme="dark"]{--wall:#16223a;--wall2:#1b2a47;--card:#24304d;--ink:#f6f1e4;--soft:#c3cbe0;--cheese:#ffc83d;--cheese-ink:#3b2a00;--tom:#8fb0cf;--line:#f6f1e4;--pink:#ff8d9b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;background:repeating-linear-gradient(90deg,var(--wall) 0 28px,var(--wall2) 28px 56px);color:var(--ink);font-family:'Fredoka',system-ui,-apple-system,'Segoe UI',sans-serif;overflow-x:hidden}
+.wrap{max-width:440px;margin:0 auto;padding:18px 16px 40px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.track{height:44px;position:relative;overflow:hidden;margin-bottom:6px}
+.run{position:absolute;top:2px;font-size:30px;white-space:nowrap;animation:chase 7s linear infinite}
+.run span{display:inline-block;transform:scaleX(-1)}
+@keyframes chase{from{left:-90px}to{left:100%}}
+.card{background:var(--card);border:3px solid var(--line);border-radius:26px;padding:22px 18px 24px;box-shadow:6px 6px 0 var(--line);text-align:center;position:relative}
+h1{font-family:'Bangers','Impact',sans-serif;font-weight:400;letter-spacing:1.5px;font-size:38px;line-height:1.05;margin:6px 0 10px}
+h2{font-family:'Bangers','Impact',sans-serif;font-weight:400;letter-spacing:1.2px;font-size:30px;line-height:1.1;margin:4px 0 10px}
+p{margin:0 0 12px;line-height:1.45;font-size:17px;color:var(--soft)}
+.big{font-size:64px;line-height:1;margin:4px 0 6px}
+.screen{display:none}.screen.on{display:block;animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:none;opacity:1}}
+.btn{font:600 19px 'Fredoka',system-ui,sans-serif;border:3px solid var(--line);border-radius:999px;padding:13px 24px;cursor:pointer;color:var(--ink);background:var(--card);box-shadow:3px 3px 0 var(--line);touch-action:manipulation}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+.yes{background:var(--cheese);color:var(--cheese-ink);transform-origin:center;transition:transform .2s}
+.row{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:70px;margin-top:14px}
+#no{transition:left .22s cubic-bezier(.3,1.6,.5,1),top .22s cubic-bezier(.3,1.6,.5,1);z-index:30;user-select:none}
+#no.fly{position:fixed}
+.hint{font-size:14px;min-height:20px;margin:8px 0 0;color:var(--tom);font-weight:500}
+.list{list-style:none;padding:0;margin:12px 0 4px;text-align:left}
+.list li{display:flex;gap:12px;align-items:center;background:var(--wall);border:2px solid var(--line);border-radius:16px;padding:10px 14px;margin-bottom:10px;font-size:17px;color:var(--ink)}
+.list li b{font-weight:600}.list .e{font-size:28px}
+.pick{display:grid;gap:12px;margin-top:14px}
+.pick .btn{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 18px}
+.pick .e{font-size:34px}.pick small{display:block;font-weight:400;font-size:14px;color:var(--soft)}
+.ticket{border:3px dashed var(--line);border-radius:18px;padding:12px 14px;margin:14px 0;text-align:left;background:var(--wall)}
+.ticket div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:16px;color:var(--ink)}
+.ticket div span:first-child{color:var(--soft)}.ticket div span:last-child{font-weight:600;text-align:right}
+.fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:50;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 16px;border-radius:999px;font-size:15px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:60;max-width:90%;text-align:center}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.run,.screen.on,.fall{animation:none}#no{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="track" aria-hidden="true"><div class="run">🐱💨 <span>🐭</span>🧀</div></div>
+
+  <section class="card screen on" id="s1">
+    <div class="big" aria-hidden="true">🐭🧀🐱</div>
+    <h1>Psst… Jerry stole the cheese and Tom needs a movie buddy</h1>
+    <p>There’s a Tom & Jerry movie coming up, and I’d really like you to be my date for it. Popcorn is on me. Will you come?</p>
+    <div class="row" id="row">
+      <button class="btn yes" id="yes">Yes, I’m in! 🎬</button>
+      <button class="btn" id="no" type="button">No</button>
+    </div>
+    <p class="hint" id="hint" aria-live="polite">Go on, press the No button. I dare you.</p>
+  </section>
+
+  <section class="card screen" id="s2">
+    <div class="big" aria-hidden="true">🎉🍿</div>
+    <h2>Yay! Tom just did a backflip</h2>
+    <p>Here’s the plan. Save the date, no cheese-stealing allowed.</p>
+    <ul class="list">
+      <li><span class="e">🕗</span><span><b>8:00 PM</b> tonight, Tom & Jerry on the big screen</span></li>
+      <li><span class="e">🍿</span><span>Complimentary <b>popcorn</b> during the movie</span></li>
+      <li><span class="e">🧀</span><span>Complimentary <b>nachos</b>, extra cheesy</span></li>
+      <li><span class="e">🥤</span><span>Complimentary <b>cool drink</b> to wash it down</span></li>
+    </ul>
+    <p>Every bite is on me. Your only job is to laugh at Tom.</p>
+    <button class="btn yes" id="next2">Sounds great, what next?</button>
+  </section>
+
+  <section class="card screen" id="s3">
+    <div class="big" aria-hidden="true">🍨😋</div>
+    <h2>After the movie, dessert time</h2>
+    <p>Jerry says no night is complete without something sweet. Where should we go?</p>
+    <div class="pick">
+      <button class="btn" data-d="Baskin Robbins" data-e="🍦"><span class="e">🍦</span><span>Baskin Robbins<small>31 flavours, zero regrets</small></span></button>
+      <button class="btn" data-d="Corner House" data-e="🍫"><span class="e">🍫</span><span>Corner House<small>Chocolate-y, gooey, dangerous</small></span></button>
+    </div>
+  </section>
+
+  <section class="card screen" id="s4">
+    <div class="big" aria-hidden="true">🏠🌙</div>
+    <h2>It’s a date! Here’s your ticket</h2>
+    <div class="ticket">
+      <div><span>Movie</span><span>Tom & Jerry</span></div>
+      <div><span>Showtime</span><span>8:00 PM</span></div>
+      <div><span>Snacks</span><span>Popcorn, nachos, cool drink</span></div>
+      <div><span>Dessert</span><span id="dessert">—</span></div>
+      <div><span>Home by</span><span>10:30 PM</span></div>
+    </div>
+    <p>I’ll drop you home safe and sound by 10:30 PM the same night, with a bag full of memories, laughs and a very sticky spoon.</p>
+    <button class="btn yes" id="send">Tell him I said yes 💌</button>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var no=$('no'), yes=$('yes'), hint=$('hint'), dodges=0, dessert='';
+  var lines=['No','Nope? 😼','Too slow!','Jerry hid the No button 🐭','Error 404: “No” not found','Tom says try again','Nice try 😂','The cheese says yes 🧀','Even Spike is rooting for Yes 🐶','This button is on vacation','Just say yes already 🥹'];
+  var hints=['Hehe, it ran away!','Catch it if you can.','It’s faster than Jerry.','Okay, the Yes button looks lonely.','Tom is judging you right now.','You can’t catch it. Nobody can.','Have you tried pressing Yes?','Jerry is laughing at you.'];
+
+  function dodge(e){
+    if(e){e.preventDefault&&e.preventDefault();e.stopPropagation&&e.stopPropagation();}
+    dodges++;
+    var w=no.offsetWidth||80,h=no.offsetHeight||50,m=12;
+    var maxX=Math.max(m,window.innerWidth-w-m), maxY=Math.max(m,window.innerHeight-h-m);
+    var x,y,tries=0,yr=yes.getBoundingClientRect();
+    do{
+      x=m+Math.random()*(maxX-m); y=m+Math.random()*(maxY-m); tries++;
+    }while(tries<25 && x<yr.right+10 && x+w>yr.left-10 && y<yr.bottom+10 && y+h>yr.top-10);
+    no.classList.add('fly'); no.style.left=x+'px'; no.style.top=y+'px';
+    no.textContent=lines[dodges%lines.length];
+    hint.textContent=hints[dodges%hints.length];
+    var s=Math.min(1+dodges*0.07,1.6); yes.style.transform='scale('+s+')';
+    if(navigator.vibrate){try{navigator.vibrate(25)}catch(_){}}
+  }
+  ['pointerenter','pointerdown','touchstart','click','focus'].forEach(function(ev){no.addEventListener(ev,dodge,{passive:false})});
+
+  function show(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
+    $(id).classList.add('on'); no.style.display='none'; window.scrollTo(0,0);
+  }
+  function rain(list,n){
+    for(var i=0;i<n;i++){
+      var d=document.createElement('div'); d.className='fall'; d.textContent=list[i%list.length];
+      d.style.left=Math.random()*96+'vw'; d.style.animationDuration=(2.2+Math.random()*2.2)+'s';
+      d.style.animationDelay=(Math.random()*0.8)+'s'; d.style.fontSize=(22+Math.random()*18)+'px';
+      document.body.appendChild(d); setTimeout(function(el){return function(){el.remove()}}(d),5500);
+    }
+  }
+  function toast(t){var el=$('toast');el.textContent=t;el.classList.add('on');setTimeout(function(){el.classList.remove('on')},2600)}
+
+  yes.addEventListener('click',function(){yes.style.transform='';show('s2');rain(['🍿','🧀','🐭','🐱','🎬','🥤'],26)});
+  $('next2').addEventListener('click',function(){show('s3')});
+  document.querySelectorAll('.pick .btn').forEach(function(b){
+    b.addEventListener('click',function(){
+      dessert=b.getAttribute('data-d'); $('dessert').textContent=dessert+' '+b.getAttribute('data-e');
+      show('s4'); rain(['🍦','🍫','🎉','❤️','🧀'],30);
+    });
+  });
+  $('send').addEventListener('click',function(){
+    var msg='Yes! I’m in for Tom & Jerry at 8 PM, with popcorn, nachos and a cool drink. Dessert at '+dessert+' after the movie. And I’m holding you to the 10:30 PM safe drop home 😄🎬';
+    if(navigator.share){navigator.share({text:msg}).catch(function(){})}
+    else{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')}
+    toast('Sent! Jerry is doing a happy dance 🐭');
+  });
+})();
+</script>
+</body>
+</html>
